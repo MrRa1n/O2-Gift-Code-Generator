@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Chrome;
 
 namespace o2_gifts
 {
@@ -45,8 +45,7 @@ namespace o2_gifts
 
     class Meths
     {
-        //FirefoxDriver firefoxDriver = new FirefoxDriver();
-        OpenQA.Selenium.Chrome.ChromeDriver firefoxDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
+        ChromeDriver chromeDriver = new ChromeDriver();
         Funcs fn = new Funcs();
         public string generatedVoucher = "";
 
@@ -68,14 +67,14 @@ namespace o2_gifts
         public void PageLoader()
         {           
             const string baseUrl = "https://www.o2-gifts.co.uk/";
-            firefoxDriver.Navigate().GoToUrl(baseUrl);
-            string currentUrl = firefoxDriver.Url;
+            chromeDriver.Navigate().GoToUrl(baseUrl);
+            string currentUrl = chromeDriver.Url;
             
 
             if (currentUrl != baseUrl)
                 Environment.Exit(0);
             else
-                firefoxDriver.Url = baseUrl;
+                chromeDriver.Url = baseUrl;
         }
         #endregion
 
@@ -83,12 +82,12 @@ namespace o2_gifts
         #region Code Insertion
         public void CodeInsertion()
         {
-            firefoxDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(120);
+            chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(120);
 
             try
             {
-                firefoxDriver.FindElement(By.Id("voucherCode")).Clear();
-                firefoxDriver.FindElement(By.Id("imeiNumber")).Clear();
+                chromeDriver.FindElement(By.Id("voucherCode")).Clear();
+                chromeDriver.FindElement(By.Id("imeiNumber")).Clear();
             }
             catch
             {
@@ -110,13 +109,13 @@ namespace o2_gifts
                 generatedVoucher = fn.GenerateVoucher(5);
             }
 
-            generatedVoucher = "KHGGL39851";
+            //generatedVoucher = "KHGGL39851";
 
-            firefoxDriver.FindElement(By.Id("voucherCode")).SendKeys(generatedVoucher);
-            firefoxDriver.FindElement(By.Id("imeiNumber")).SendKeys("358792080521412" + Keys.Enter);
+            chromeDriver.FindElement(By.Id("voucherCode")).SendKeys(generatedVoucher);
+            chromeDriver.FindElement(By.Id("imeiNumber")).SendKeys("358792080521412" + Keys.Enter);
 
             // Checking if the URL changes (voucher is successful)
-            if (firefoxDriver.Url == "https://www.o2-gifts.co.uk/offer/select/index/")
+            if (chromeDriver.Url == "https://www.o2-gifts.co.uk/offer/select/index/")
             {
                 // Writes the valid voucher to separate text file
                 using (StreamWriter stw = new StreamWriter("valid_vouchers.txt", true))
